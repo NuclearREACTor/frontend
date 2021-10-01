@@ -43,7 +43,7 @@ function FetchFood() {
     console.log(orderMap);
     const jsonPayload = Object.fromEntries(orderMap);
     axios
-      .post("http://localhost:8000/order/place", {
+      .post("https://foodappbackend.herokuapp.com/order/place", {
         body: jsonPayload,
       })
       .then((resp) => {
