@@ -1,9 +1,19 @@
-## Frontend
+## Week-3 Task List
 
-## Run the code
+# Task Completed 
 
-- cd client
-- npm i
-- npm start
+- Setup the main page of the website with REACT components.
+- Learned React-Bootstrap for Modal
+- Setup the a dump database.
 
-- So it will start on localhost:3000 port
+# Learning Resources :
+
+- https://www.udemy.com/course/mern-stack-react-redux-node-mongo-pizza-delivery-app/
+
+- https://react-bootstrap.github.io/components/modal/
+
+- https://reactjs.org/docs/lists-and-keys.html
+
+# Learning Notes :
+
+- 
