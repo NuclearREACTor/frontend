@@ -1,18 +1,19 @@
-import logo from "./logo.svg";
 import "./App.css";
 import bootstrap from "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import {BrowserRouter, Route, Link, Switch}from 'react-router-dom';
 import Navbar from "./components/Navbar";
-import HomePage from "./screens/Homepage";
-import Banner from "./components/Banner";
-import FetchFood from "./FetchFood";
+// import HomePage from "./screens/Homepage";
+import MainPage from "./MainPage";
+import OrderPage from "./OrderPage";
 
 function App() {
   return (
     <div className="App container">
-      <Navbar />
-      <Banner />
-      <h2>Food Menu</h2>
-      <FetchFood />
+        <Navbar />
+      <BrowserRouter>
+      <Route path="/" exact component ={MainPage}/>
+      <Route path="/order/:id" exact component={OrderPage}/>
+      </BrowserRouter>
     </div>
   );
 }

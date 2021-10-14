@@ -15,9 +15,9 @@ function FetchFood() {
 
   const updateTotal = (amt, operation) => {
     if (operation === "sub") {
-      setTotalAmount(totalAmount - amt);
+      // setTotalAmount(totalAmount - amt);
     } else {
-      setTotalAmount(totalAmount + amt);
+      // setTotalAmount(totalAmount + amt);
     }
     console.log(totalAmount);
   };
@@ -40,14 +40,15 @@ function FetchFood() {
   };
 
   const placeOrder = () => {
-    console.log(orderMap);
+    
     const jsonPayload = Object.fromEntries(orderMap);
     axios
       .post("http://localhost:8000/order/place", {
         body: jsonPayload,
       })
       .then((resp) => {
-        console.log(resp);
+        window.open("http://localhost:3000/order/"+resp.data)
+        console.log(resp.data);
       });
   };
 
