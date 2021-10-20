@@ -73,14 +73,7 @@ function OrderPage(props) {
                 <div className="row justify-content-center">
                     <div className="col-md-6">
                         <h2>Order Details</h2>
-                        { }
-                        {/* <div className="p-3">
-                            <h2>name: {props.match.params.id}</h2>
-                            <p>Price: <b>price</b></p>
-                            <p>Quantity:<b>quantity</b></p>
-                            <p>Total:<b>price * item.quantity $</b></p>
-                            <hr />
-                        </div> */}
+                        
 
                         {receivedData.orderDetails.map(item => {
                             return (
