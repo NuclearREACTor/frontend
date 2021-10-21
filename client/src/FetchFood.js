@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import RenderFood from "./RenderFood";
 import axios from "axios";
 import { Button } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+
+
 
 function FetchFood() {
   const [receivedData, setReceivedDate] = useState({
@@ -11,6 +14,9 @@ function FetchFood() {
 
   const [totalAmount, setTotalAmount] = useState(0);
   const [reset, resetOrder] = useState(false);
+  const history = useHistory();
+  const navigateTo = (data) => history.push("/order/"+data);
+
   let orderMap = new Map();
 
   const updateTotal = (amt, operation) => {
@@ -47,7 +53,7 @@ function FetchFood() {
         body: jsonPayload,
       })
       .then((resp) => {
-        window.open("http://localhost:3000/order/"+resp.data)
+        navigateTo(resp.data);
         console.log(resp.data);
       });
   };

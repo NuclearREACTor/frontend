@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
+
 // import cartItems from "../cartItem";
 
 function OrderPage(props) {
-
-
     const [receivedData, setReceivedData] = useState({
         isLoaded: false,
         isDetailLoaded: false,
@@ -18,7 +18,12 @@ function OrderPage(props) {
             getOrder();
         }
     });
-    let finalOrder = {};
+    const history = useHistory();
+    let finalOrder = () => {
+        axios("https://foodappbackend.herokuapp.com/order/delete/"+props.match.params.id).then((json) => {
+            console.log(json.data)
+    });
+    };
     useEffect(() => {
         let total = 0;
         if (receivedData.isLoaded == true) {
@@ -46,6 +51,7 @@ function OrderPage(props) {
                 })
             }
             setReceivedData({ isLoaded: true, orderDetails: result.data });
+           
         });
     };
 
@@ -57,9 +63,16 @@ function OrderPage(props) {
                 body: jsonPayload,
             })
             .then((resp) => {
-                console.log(resp.data);
+                let id = props.match.params.id
+                history.push("/payment/"+id)
             });
     };
+    const deleteOrder = () => {
+        axios.delete("http://localhost:8000/order/delete/"+props.match.params.id).then((json) => {
+            
+        });
+      };
+    
     if (!receivedData.isLoaded) {
         return (
             <div>
@@ -73,8 +86,6 @@ function OrderPage(props) {
                 <div className="row justify-content-center">
                     <div className="col-md-6">
                         <h2>Order Details</h2>
-                        
-
                         {receivedData.orderDetails.map(item => {
                             return (
 
@@ -83,8 +94,7 @@ function OrderPage(props) {
                                     <p>Price: <b>{item.price}</b></p>
                                     <p>Quantity: <b>{item.quantity}</b></p>
                                     <p>Sub Total : <b>{item.price * item.quantity}</b></p>
-                                    {/* <p>Quantity:<b>{item.quantity}</b></p>
-                                        <p>Total:<b>{item.price * item.quantity} $</b></p> */}
+                                    
                                     <hr />
                                 </div>
                             )
@@ -94,13 +104,14 @@ function OrderPage(props) {
                     <div className="col-md-4">
                         <h2>Total</h2>
                         <h3>{itemTotal} $</h3>
-                        <button
-                            className="btn btn-success m-2"
-                            type="button"
-                            onClick={payDetails}
-                        >
+                        <button className="btn btn-success m-2" type="button" onClick={payDetails} >
                             Pay Now
-                        </button>                    </div>
+                        </button>  
+                        <button className="btn btn-danger m-2" type="button" onClick={deleteOrder} >
+                            Delete
+                        </button>       
+                                    
+                    </div>
                 </div>
             </div>
         )
