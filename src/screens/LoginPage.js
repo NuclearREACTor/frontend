@@ -3,7 +3,6 @@ import axios from "axios";
 import AuthContext from "../context/AuthContext";
 
 function Login() {
-
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
 
@@ -13,16 +12,18 @@ function Login() {
     e.preventDefault();
     try {
       const loginData = {
-        email, password,
+        email,
+        password,
       };
 
-      await axios.post("http://localhost:8000/auth/login", loginData);
+      await axios.post(
+        "https://foodappbackend.herokuapp.com/auth/login",
+        loginData
+      );
       await getLoggedIn();
-
     } catch (err) {
       console.log(err);
     }
-
   }
 
   return (
@@ -31,16 +32,29 @@ function Login() {
       <div className="row justify-content-center mt-5">
         <div className="col-md-5">
           <form onSubmit={login}>
-            <input type="text" placeholder="email" className="form-control"
-              onChange={(e) => { setemail(e.target.value) }}
+            <input
+              type="text"
+              placeholder="email"
+              className="form-control"
+              onChange={(e) => {
+                setemail(e.target.value);
+              }}
             />
-            <input type="password" placeholder="password" className="form-control"
-              onChange={(e) => { setpassword(e.target.value) }} />
-            <button type="submit" className="btn btn-primary mt-3">Login</button>
+            <input
+              type="password"
+              placeholder="password"
+              className="form-control"
+              onChange={(e) => {
+                setpassword(e.target.value);
+              }}
+            />
+            <button type="submit" className="btn btn-primary mt-3">
+              Login
+            </button>
           </form>
         </div>
       </div>
-    </div >
+    </div>
   );
 }
 
