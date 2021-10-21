@@ -30,6 +30,18 @@ function FetchCategory(props) {
   const renderFoodItems = () => {
     let { items } = receivedData;
     let foodChildDivs = [];
+    foodChildDivs.push(
+      <Button
+        className="m-2"
+        value={null}
+        onClick={(e) => {
+          updateCategory(e.target.value);
+          // console.log(e.target.value);
+        }}
+      >
+        All
+      </Button>
+    );
     for (let item of items) {
       foodChildDivs.push(
         <Button
