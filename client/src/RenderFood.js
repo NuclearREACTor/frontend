@@ -63,7 +63,7 @@ function RenderFood(props) {
         +
       </button>
       <div className="Total">Total: {quantity * props.price}</div>
-      <button
+      {/* <button
         type="button"
         className="order-reset btn btn-danger"
         onClick={() => {
@@ -71,7 +71,7 @@ function RenderFood(props) {
         }}
       >
         Reset
-      </button>
+      </button> */}
     </div>
   );
 }
