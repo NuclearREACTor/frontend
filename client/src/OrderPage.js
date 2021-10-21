@@ -67,7 +67,7 @@ function OrderPage(props) {
     };
     const deleteOrder = () => {
         axios.delete("http://localhost:8000/order/delete/"+props.match.params.id).then((json) => {
-            
+            history.push("/")
         });
       };
     
@@ -82,7 +82,7 @@ function OrderPage(props) {
         return (
             <div>
                 <div className="row justify-content-center">
-                    <div className="col-md-6">
+                    <div>
                         <h2>Order Details</h2>
                         <div className="orderContainer">
                         {receivedData.orderDetails.map(item => {
@@ -94,15 +94,13 @@ function OrderPage(props) {
                                     <p>Quantity: <b>{item.quantity}</b></p>
                                     <p>Sub Total : <b>{item.price * item.quantity}</b></p>
                                     
-                                    <hr />
                                 </div>
                             )
                         })}
                         </div>
-                        
-
                     </div>
-                    <div className="col-md-4">
+                    <div className="totalCard">
+                       <div>
                         <h2>Total</h2>
                         <h3>{itemTotal} $</h3>
                         <button className="btn btn-success m-2" type="button" onClick={payDetails} >
@@ -110,8 +108,8 @@ function OrderPage(props) {
                         </button>  
                         <button className="btn btn-danger m-2" type="button" onClick={deleteOrder} >
                             Delete
-                        </button>       
-                                    
+                        </button>   
+                        </div>            
                     </div>
                 </div>
             </div>
