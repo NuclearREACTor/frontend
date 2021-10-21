@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./order.css";
 import { useHistory } from "react-router-dom";
 
 // import cartItems from "../cartItem";
@@ -17,13 +18,10 @@ function OrderPage(props) {
         if (receivedData.isLoaded !== true) {
             getOrder();
         }
+
     });
     const history = useHistory();
-    let finalOrder = () => {
-        axios("https://foodappbackend.herokuapp.com/order/delete/"+props.match.params.id).then((json) => {
-            console.log(json.data)
-    });
-    };
+    let finalOrder ={};
     useEffect(() => {
         let total = 0;
         if (receivedData.isLoaded == true) {
@@ -57,7 +55,7 @@ function OrderPage(props) {
 
     const payDetails = () => {
 
-        const jsonPayload = finalOrder;
+        const jsonPayload = {orderId:props.match.params.id, total:itemTotal};
         axios
             .post("http://localhost:8000/pay/payNow", {
                 body: jsonPayload,
@@ -86,10 +84,11 @@ function OrderPage(props) {
                 <div className="row justify-content-center">
                     <div className="col-md-6">
                         <h2>Order Details</h2>
+                        <div className="orderContainer">
                         {receivedData.orderDetails.map(item => {
                             return (
 
-                                <div className="p-3">
+                                <div className="orderCard">
                                     <h2>{item.foodName}</h2>
                                     <p>Price: <b>{item.price}</b></p>
                                     <p>Quantity: <b>{item.quantity}</b></p>
@@ -99,6 +98,8 @@ function OrderPage(props) {
                                 </div>
                             )
                         })}
+                        </div>
+                        
 
                     </div>
                     <div className="col-md-4">
