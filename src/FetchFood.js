@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import RenderFood from "./RenderFood";
 import axios from "axios";
 import { Button } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+import FetchCategory from "./FetchCategory";
 
 function FetchFood() {
   const [receivedData, setReceivedDate] = useState({
@@ -11,7 +13,10 @@ function FetchFood() {
 
   const [totalAmount, setTotalAmount] = useState(0);
   const [reset, resetOrder] = useState(false);
-  let orderMap = new Map();
+  const history = useHistory();
+  const navigateTo = (data) => history.push("/order/" + data);
+  const [orderMap, setOrderMap] = useState(new Map());
+  const [foodCategory, setFoodCategory] = useState(null);
 
   const updateTotal = (amt, operation) => {
     if (operation === "sub") {
@@ -20,11 +25,11 @@ function FetchFood() {
       setTotalAmount(totalAmount + amt);
     }
     console.log(totalAmount);
+    console.log(orderMap);
   };
 
   const populateOrder = (id, quantity) => {
-    console.log(id, quantity);
-    orderMap.set(id, quantity);
+    setOrderMap(new Map(orderMap.set(id, quantity)));
   };
 
   useEffect(() => {
@@ -33,21 +38,40 @@ function FetchFood() {
     }
   });
 
+  useEffect(() => {
+    getFoodItems();
+  }, [foodCategory]);
+
+  const updateCategory = (item) => {
+    console.log("Here in parent");
+    setFoodCategory(item);
+    console.log(foodCategory);
+    // getFoodItems();
+  };
+
   const getFoodItems = () => {
-    axios("https://foodappbackend.herokuapp.com/food/get").then((json) => {
-      setReceivedDate({ isLoaded: true, items: json.data });
-    });
+    if (foodCategory != null) {
+      axios(
+        "https://foodappbackend.herokuapp.com/food/get?foodType=" + foodCategory
+      ).then((json) => {
+        setReceivedDate({ isLoaded: true, items: json.data });
+      });
+    } else {
+      axios("https://foodappbackend.herokuapp.com/food/get").then((json) => {
+        setReceivedDate({ isLoaded: true, items: json.data });
+      });
+    }
   };
 
   const placeOrder = () => {
-    console.log(orderMap);
     const jsonPayload = Object.fromEntries(orderMap);
     axios
       .post("https://foodappbackend.herokuapp.com/order/place", {
         body: jsonPayload,
       })
       .then((resp) => {
-        console.log(resp);
+        navigateTo(resp.data);
+        console.log(resp.data);
       });
   };
 
@@ -83,6 +107,7 @@ function FetchFood() {
     const items = renderFoodItems();
     return (
       <div className="container">
+        <FetchCategory update={updateCategory} />
         <div className="row results">{items}</div>
         <div className="total">Total : {totalAmount}$</div>
         <button

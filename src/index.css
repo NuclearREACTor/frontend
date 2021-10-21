@@ -38,3 +38,10 @@ code {
 a{
   text-decoration: none!important;
 }
+#errormsg {
+  display: block;
+  color: red;
+}
+input {
+  margin-top: 10px !important;
+}
