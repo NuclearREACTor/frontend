@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./order.css";
+import { useHistory } from "react-router-dom";
+
 // import cartItems from "../cartItem";
 
 function OrderPage(props) {
-
-
     const [receivedData, setReceivedData] = useState({
         isLoaded: false,
         isDetailLoaded: false,
@@ -17,8 +18,10 @@ function OrderPage(props) {
         if (receivedData.isLoaded !== true) {
             getOrder();
         }
+
     });
-    let finalOrder = {};
+    const history = useHistory();
+    let finalOrder ={};
     useEffect(() => {
         let total = 0;
         if (receivedData.isLoaded == true) {
@@ -46,20 +49,28 @@ function OrderPage(props) {
                 })
             }
             setReceivedData({ isLoaded: true, orderDetails: result.data });
+           
         });
     };
 
     const payDetails = () => {
 
-        const jsonPayload = finalOrder;
+        const jsonPayload = {orderId:props.match.params.id, total:itemTotal};
         axios
             .post("http://localhost:8000/pay/payNow", {
                 body: jsonPayload,
             })
             .then((resp) => {
-                console.log(resp.data);
+                let id = props.match.params.id
+                history.push("/payment/"+id)
             });
     };
+    const deleteOrder = () => {
+        axios.delete("http://localhost:8000/order/delete/"+props.match.params.id).then((json) => {
+            history.push("/")
+        });
+      };
+    
     if (!receivedData.isLoaded) {
         return (
             <div>
@@ -71,36 +82,35 @@ function OrderPage(props) {
         return (
             <div>
                 <div className="row justify-content-center">
-                    <div className="col-md-6">
+                    <div>
                         <h2>Order Details</h2>
-                        
-
+                        <div className="orderContainer">
                         {receivedData.orderDetails.map(item => {
                             return (
 
-                                <div className="p-3">
+                                <div className="orderCard">
                                     <h2>{item.foodName}</h2>
                                     <p>Price: <b>{item.price}</b></p>
                                     <p>Quantity: <b>{item.quantity}</b></p>
                                     <p>Sub Total : <b>{item.price * item.quantity}</b></p>
-                                    {/* <p>Quantity:<b>{item.quantity}</b></p>
-                                        <p>Total:<b>{item.price * item.quantity} $</b></p> */}
-                                    <hr />
+                                    
                                 </div>
                             )
                         })}
-
+                        </div>
                     </div>
-                    <div className="col-md-4">
+                    <div className="totalCard">
+                       <div>
                         <h2>Total</h2>
                         <h3>{itemTotal} $</h3>
-                        <button
-                            className="btn btn-success m-2"
-                            type="button"
-                            onClick={payDetails}
-                        >
+                        <button className="btn btn-success m-2" type="button" onClick={payDetails} >
                             Pay Now
-                        </button>                    </div>
+                        </button>  
+                        <button className="btn btn-danger m-2" type="button" onClick={deleteOrder} >
+                            Delete
+                        </button>   
+                        </div>            
+                    </div>
                 </div>
             </div>
         )
